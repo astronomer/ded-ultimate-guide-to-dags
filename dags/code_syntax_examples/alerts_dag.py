@@ -3,7 +3,7 @@ This DAG shows DAG-level and task-level alerts.
 """
 
 from airflow.decorators import dag, task
-from pendulum import datetime, duration
+from pendulum import duration
 from airflow.notifications.basenotifier import BaseNotifier
 
 class MyNotifier(BaseNotifier):
@@ -26,14 +26,6 @@ def my_callback_function(context):
     print(f"Hi from my_callback_function! {t_id} finished as: {t_state}")
 
 
-def success_function():
-    return 10
-
-
-def failure_function():
-    return 10 / 0
-
-
 @dag(
     start_date=None,
     schedule=None,
@@ -48,6 +40,7 @@ def failure_function():
         "on_retry_callback": [my_callback_function, MyNotifier()],
         "on_success_callback": [my_callback_function, MyNotifier()],
         "on_failure_callback": [my_callback_function, MyNotifier()],
+        "on_skipped_callback": [my_callback_function, MyNotifier()],  # Airflow 2.9+
         "retries": 3,
         "retry_delay": duration(seconds=5)
     },
@@ -60,6 +53,7 @@ def callbacks_overview():
         on_retry_callback=[my_callback_function, MyNotifier()],
         on_success_callback=[my_callback_function, MyNotifier()],
         on_failure_callback=[my_callback_function, MyNotifier()],
+        on_skipped_callback=[my_callback_function, MyNotifier()],  # Airflow 2.9+, only responds to AirflowSkipException
     )
     def task_succeeding_task_level_callback():
         return 10
@@ -70,6 +64,7 @@ def callbacks_overview():
         on_retry_callback=[my_callback_function, MyNotifier()],
         on_success_callback=[my_callback_function, MyNotifier()],
         on_failure_callback=[my_callback_function, MyNotifier()],
+        on_skipped_callback=[my_callback_function, MyNotifier()],  # Airflow 2.9+, only responds to AiflowSkipException
     )
     def task_failing_task_level_callback():
         return 10 / 0
