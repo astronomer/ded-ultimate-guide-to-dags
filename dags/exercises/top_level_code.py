@@ -1,3 +1,5 @@
+"""WARNING BAD PRACTICE: DO NOT USE TOP LEVEL CODE IN YOUR DAGS"""
+
 from datetime import datetime
 
 from airflow.decorators import dag, task
