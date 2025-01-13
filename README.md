@@ -14,7 +14,7 @@ This repo was part of a 2hr workshop of which a recording, including a walk-thro
 
 ## How to use this repo
 
-Set up your environment by following the instructions in the [Setup](#setup) section below. All DAGs in this repository can be run locally and on Astro without connecting to external systems. [Exercises 1-4](#dag-writing-exercises) are focussed on DAG writing and can be completed in a local environment. [Exercises 5-8](#day-2-dag-operations-exercises) are focussed on deploying and testing DAGs and exercises 5-7 require an Astro deployment. If you do not have an Astro account yet, you can sign up for a free trial [here](http://q-r.to/dag-workshop-astro-trial).
+Set up your environment by following the instructions in the [Setup](#setup) section below. All DAGs in this repository can be run locally and on Astro without connecting to external systems. [Exercises 1-4](#dag-writing-exercises) are focussed on DAG writing and can be completed in a local environment. [Exercises 5-8](#day-2-dag-operations-exercises) are focussed on deploying and testing DAGs and exercises 5-7 require an Astro deployment. If you do not have an Astro account yet, you can sign up for a free trial [here](https://qrco.de/try-astro).
 
 Sample solutions for DAG-writing related exercises can be found in the [`dags/solutions`](/solutions/) folder of the repo, note that some exercises can be solved in multiple ways.
 
@@ -169,7 +169,7 @@ Feel free to use the following resources:
 
 ## Exercise 5: Start a trial and create a Deployment
 
-1. Start an Astro trial using [this link](http://q-r.to/dag-workshop-astro-trial ). You can choose a template project to deploy if you wish, or you can skip this step.
+1. Start an Astro trial using [this link](https://qrco.de/try-astro). You can choose a template project to deploy if you wish, or you can skip this step.
 2. Create a new, empty Airflow Deployment in your Astro workspace with default settings.
 
 ## Exercise 6: Deploy code to Astro
