@@ -224,7 +224,7 @@ With dynamic task mapping you can write Dags that adapt to your data at runtime.
 ## Your tasks
 
 1. Change the `get_planets` task in the [`planet_conditions`](dags/exercises/planet_conditions.py) Dag, so it returns all planets in the param instead of only the first one.
-2. Adjust the call to `get_id_for_one_planet`in the [`planet_conditions`](dags/exercises/planet_conditions.py) Dag, so it is mapped over that list.
+2. Adjust the call to `get_id_for_one_planet` in the [`planet_conditions`](dags/exercises/planet_conditions.py) Dag, so it is mapped over that list.
 
 See the Dag code comments and the [dynamic task mapping guide](https://www.astronomer.io/docs/learn/dynamic-tasks/) for more hints.
 
@@ -235,7 +235,7 @@ See the Dag code comments and the [dynamic task mapping guide](https://www.astro
 3. Check that the table in the `create_conditions_table` logs now has a column per planet.
 
 > [!TIP]
-> Trigger the Dag with and add or remove planets in the `my_planets` param. The number of mapped task instances follows your input, without any change to the Dag code.
+> Trigger the Dag and add or remove planets in the `my_planets` param. The number of mapped task instances follows your input, without any change to the Dag code.
 
 ---
 

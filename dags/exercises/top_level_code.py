@@ -16,6 +16,10 @@ from include.helper_functions import expensive_trajectory_calculation
 def top_level_code():
 
     #### EXERCISE 4 ####
+    # expensive_trajectory_calculation() runs here at parse time, on every single parse of
+    # this file. Move it inside the task so it runs when the Dag runs.
+
+    ### START CODE HERE ###
     the_optimal_trajectory_correction = expensive_trajectory_calculation()
 
     @task
@@ -23,6 +27,7 @@ def top_level_code():
         print(f"The optimal trajectory correction is... {correction} degrees.")
 
     reveal_the_trajectory_correction(the_optimal_trajectory_correction)
+    ### END CODE HERE ###
 
 
 top_level_code()
