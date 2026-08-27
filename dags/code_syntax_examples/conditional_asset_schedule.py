@@ -14,7 +14,6 @@ from pendulum import datetime
     ),  # Runs when one asset in each group is updated
     # Use conditional logic to schedule a Dag based on assets.
     # Use () instead of [] to be able to use conditional asset scheduling!
-    catchup=False,
     doc_md=__doc__,
     tags=["syntax_example"],
     default_args={"retries": 3},

@@ -20,7 +20,6 @@ from airflow.providers.standard.operators.bash import BashOperator
 @dag(
     start_date=None,
     schedule=None,
-    catchup=False,
     default_args={
         "retries": 3,
         "retry_delay": duration(minutes=1),

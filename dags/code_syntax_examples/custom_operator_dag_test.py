@@ -16,7 +16,6 @@ from include.helper_functions import calculate_launch_offset
 @dag(
     start_date=datetime(2024, 1, 1),
     schedule="@daily",
-    catchup=False,
     doc_md=__doc__,
     params={
         "base_fare_usd": Param(25000, type="integer"),

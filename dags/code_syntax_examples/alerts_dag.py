@@ -30,7 +30,6 @@ def my_callback_function(context):
 @dag(
     start_date=None,
     schedule=None,
-    catchup=False,
     # Dag level callbacks depend on events happening to the Dag itself
     on_success_callback=[my_callback_function, MyNotifier()],
     on_failure_callback=[my_callback_function, MyNotifier()],

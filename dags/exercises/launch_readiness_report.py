@@ -62,7 +62,6 @@ _SOLAR_ACTIVITY = Asset("solar-activity")
     schedule=None,
     ### END CODE HERE ###
 
-    catchup=False,
     doc_md=__doc__,
     description="Generate the AstroTrips launch readiness report.",
 

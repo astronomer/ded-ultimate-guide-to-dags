@@ -10,7 +10,6 @@ import time
 @dag(
     start_date=None,
     schedule=None,
-    catchup=False,
     tags=["syntax_example"],
     default_args={"execution_timeout": timedelta(seconds=10), "retries": 3},
 )

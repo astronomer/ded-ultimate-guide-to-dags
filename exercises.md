@@ -7,7 +7,7 @@
 - [Exercise 2: Dynamic task mapping](#exercise-2-dynamic-task-mapping)
 - [Exercise 3: Dag parameters](#exercise-3-dag-parameters)
 - [Exercise 4: Avoid top-level Dag code](#exercise-4-avoid-top-level-dag-code)
-- [Exercise 5: Write a Dag validation test](#exercise-5-write-a-dag-validation-test)
+- [Exercise 5: Write a Dag validation test (bonus)](#exercise-5-write-a-dag-validation-test-bonus)
 
 The exercise Dags live in [`dags/exercises`](dags/exercises/). They are tagged with `exercise` as well as their exercise number, so you can filter for them in the Airflow UI. Some exercises can be solved in more than one way.
 
@@ -294,66 +294,42 @@ Top-level Dag code is an [Airflow anti-pattern](https://www.astronomer.io/docs/l
 
 ---
 
-# Exercise 5: Write a Dag validation test
+# Exercise 5: Write a Dag validation test (bonus)
 
-The Astro CLI and the Astro IDE let you test and debug Dags both inside and outside a running Airflow environment. Wiring those tests into CI is how you keep new Dag code from breaking your organization's standards in production.
+> [!NOTE]
+> This is a bonus exercise and needs a local setup with the [Astro CLI](https://www.astronomer.io/docs/astro/cli/install-cli), because the tests run with `astro dev pytest` on your own machine.
 
-This project ships example tests in [`tests`](tests/):
+The Astro CLI can test and debug Dags outside a running Airflow environment, and those tests can then run as part of a CI/CD workflow. Dag validation tests are how you make sure new Dag code follows your organization's standards before it reaches production.
 
-| Folder | What it covers |
-|--------|----------------|
-| [`tests/dag_validation_tests`](tests/dag_validation_tests/) | Every Dag imports cleanly and sets task retries, plus a separate check that the ignored syntax examples still import. |
-| [`tests/unit_tests`](tests/unit_tests/) | The custom operator in [`include/custom_operator.py`](include/custom_operator.py). |
-| [`tests/integration_tests`](tests/integration_tests/) | The AstroTrips conditions API and the helpers built on it. |
+This project ships examples in [`tests`](tests/): Dag validation tests, a unit test for a custom operator, and an integration test.
 
 **What you will learn:**
 
-- 💡 Running the test suite from the Astro IDE.
 - 💡 Enforcing a Dag standard with a validation test.
+- 💡 Running the test suite with `astro dev pytest`.
 
-## Your task
+## Your tasks
 
-1. Run the tests as they are and note the result. `test_dag_retries` fails for `launch_readiness_report` until you complete Exercise 3, and for `top_level_code`, which never sets retries at all. That is the whole point of the test.
-2. Update `test_dag_retries` in [`tests/dag_validation_tests/test_dag_validation.py`](tests/dag_validation_tests/test_dag_validation.py) to require at least **3** retries instead of 2.
-3. Remove `retries` from the `default_args` of one of your Dags and run the tests again to see the failure.
-4. Put the retries back.
+1. Run `astro dev pytest` and note the result. `test_dag_retries` already fails for any Dag that does not set retries.
 
 > [!TIP]
-> The same file has three more validation tests commented out: approved tags, `catchup=False`, and an allow-list of operators. Uncomment one and see what it says about this project.
-
-## How to run the tests
-
-In the Astro IDE, sync your changes and switch to the Test view.
-
-![Open test tab within the Astro IDE](doc/screenshot-astro-ide-test-tab.png)
-
-> [!TIP]
-> The Test view also lets you run a single Dag without opening Airflow at all. Select a Dag
-> from the dropdown, click _Run Dag_, and inspect the logs of any task right there. It is a
-> quick way to check your work between exercises.
-
-If you are working locally with the Astro CLI, run:
-
-```bash
-astro dev pytest
-```
+> The same file has two more validation tests commented out: approved tags and an allow-list of operators. Uncomment one and see what it says about this project.
 
 ---
 
 # Congratulations
 
-You took a set of Dags that only worked by accident and turned them into a connected, data-aware pipeline:
+You turned a set of Dags into a connected, data-aware pipeline:
 
 - 🚀 `planet_conditions` and `launch_window_history` publish assets, and `launch_readiness_report` reacts to them with a conditional `AssetOrTimeSchedule`.
 - 🚀 The planet lookup adapts to its input at runtime with dynamic task mapping.
-- 🚀 Every task retries, the Dag has an owner, and a run of failures pauses the Dag instead of hammering away.
+- 🚀 Every task retries, the Dag has an owner, and a run of failures pauses the Dag.
 - 🚀 Expensive work happens when the Dag runs, not every time it is parsed.
-- 🚀 Alerts tell you when something breaks, and a validation test stops the next Dag from regressing the standard.
+- 🚀 A validation test stops the next Dag from regressing the standard.
 
 ## Where to go next
 
 - Browse [`dags/code_syntax_examples`](dags/code_syntax_examples/) for features this workshop did not cover: callbacks and notifiers, deferrable operators, `execution_timeout`, `.override()`, `run_if` and `skip_if`, and XCom `.concat()`.
 - Read the [Dag writing best practices guide](https://www.astronomer.io/docs/learn/dag-best-practices).
-- Look at what arrived in Airflow 3 that this workshop touched only in passing: [human-in-the-loop operators](https://www.astronomer.io/docs/learn/airflow-human-in-the-loop), Dag versioning, and asset partitions.
 
 Thank you for joining. 🛰️

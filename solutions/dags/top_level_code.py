@@ -9,7 +9,6 @@ from include.helper_functions import expensive_trajectory_calculation
     start_date=datetime(2026, 6, 1),
     max_active_runs=3,
     schedule=None,
-    catchup=False,
     tags=["solution"],
     default_args={"owner": "Astro", "retries": 3},
 )

@@ -15,7 +15,7 @@ from pendulum import datetime, duration
         2026, 6, 1
     ),  # date after which the Dag can be scheduled, see: https://www.astronomer.io/docs/learn/scheduling-in-airflow/#scheduling-concepts
     schedule="@daily",  # the Dag's schedule, there are many options, see: https://www.astronomer.io/docs/learn/scheduling-in-airflow for options
-    catchup=False,  # whether or not missed runs should be scheduled upon unpausing of the Dag, see: https://www.astronomer.io/docs/learn/rerunning-dags#catchup
+    catchup=False,  # whether missed runs should be scheduled when the Dag is unpaused. False is the default in Airflow 3, so it is set here only to show the parameter, see: https://www.astronomer.io/docs/learn/rerunning-dags#catchup
     max_active_runs=2,  # maximum number of active Dag runs at any point in time
     max_consecutive_failed_dag_runs=5,  # auto-pauses the Dag after x consecutive failed runs, experimental
     max_active_tasks=10,  # maximum number of active tasks across all runs of this Dag at any point in time

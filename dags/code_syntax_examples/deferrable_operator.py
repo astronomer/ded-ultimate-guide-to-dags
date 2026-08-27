@@ -13,7 +13,6 @@ from include.custom_deferrable_operator import MyDeferrableOperator
 @dag(
     start_date=None,
     schedule=None,
-    catchup=False,
     tags=["syntax_example"],
     default_args={"retries": 3},
 )

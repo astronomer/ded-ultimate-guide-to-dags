@@ -9,7 +9,6 @@ from pendulum import datetime
 @dag(
     start_date=datetime(2024, 8, 1),
     schedule=None,
-    catchup=False,
     tags=["syntax_example"],
     default_args={"retries": 3},
 )

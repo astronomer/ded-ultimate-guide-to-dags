@@ -12,7 +12,7 @@ This is a workshop about Dag writing best practices. It is designed to help you 
 - Adapting a Dag to its data at runtime with dynamic task mapping.
 - Using Dag parameters to make retries, ownership and failure handling explicit.
 - Spotting and removing top-level Dag code, one of the most common Airflow anti-patterns.
-- Setting up alerts and Dag validation tests for the day after you ship.
+- Writing a Dag validation test that stops the next Dag from regressing your standards.
 
 > [!NOTE]
 > tl;dr: jump directly to the [exercises](exercises.md).

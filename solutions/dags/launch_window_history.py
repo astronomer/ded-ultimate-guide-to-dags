@@ -25,7 +25,6 @@ _SOLAR_ACTIVITY_TASK_ID = "get_solar_activity"
     start_date=datetime(2026, 6, 1),
     schedule=None,
     max_consecutive_failed_dag_runs=10,
-    catchup=False,
     doc_md=__doc__,
     default_args={
         "owner": "Astro",

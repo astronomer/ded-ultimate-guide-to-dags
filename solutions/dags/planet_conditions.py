@@ -20,7 +20,6 @@ t_log = logging.getLogger("airflow.task")
     start_date=datetime(2026, 6, 1),
     schedule=None,
     max_consecutive_failed_dag_runs=10,
-    catchup=False,
     doc_md=__doc__,
     description="Retrieve launch conditions for a list of planets.",
     default_args={

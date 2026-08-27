@@ -44,7 +44,6 @@ _SOLAR_ACTIVITY = Asset("solar-activity")
         # AND whenever both "planet-conditions" and "launch-temperature" are updated
         # AS WELL AS ONE OF the assets "launch-storm-risk" OR "launch-visibility".
     ),
-    catchup=False,
     max_consecutive_failed_dag_runs=6,
     doc_md=__doc__,
     description="Generate the AstroTrips launch readiness report.",

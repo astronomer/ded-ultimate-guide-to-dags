@@ -20,7 +20,6 @@ from airflow.providers.standard.operators.empty import EmptyOperator
 @dag(
     start_date=None,
     schedule=None,
-    catchup=False,
     tags=["syntax_example"],
     default_args={"retries": 3},
 )
