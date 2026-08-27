@@ -1,5 +1,5 @@
 """
-This DAG shows how to set task retries at the DAG and task level.
+This Dag shows how to set task retries at the Dag and task level.
 
 You can also set the following Airflow configurations to control retries at the Airflow environment level:
 - AIRFLOW__CORE__DEFAULT_TASK_RETRIES (default is 0)
@@ -12,9 +12,9 @@ See also:
 - Airflow configuration reference: https://airflow.apache.org/docs/apache-airflow/stable/configurations-ref.html
 """
 
-from airflow.decorators import dag, task
+from airflow.sdk import dag, task
 from pendulum import datetime, duration
-from airflow.operators.bash import BashOperator
+from airflow.providers.standard.operators.bash import BashOperator
 
 
 @dag(
@@ -25,7 +25,7 @@ from airflow.operators.bash import BashOperator
         "retries": 3,
         "retry_delay": duration(minutes=1),
         "retry_exponential_backoff": True,
-    },  # set defaults for all tasks in the DAG overriding any config-level defaults
+    },  # set defaults for all tasks in the Dag overriding any config-level defaults
     doc_md=__doc__,
     tags=["syntax_example"],
 )
@@ -34,7 +34,7 @@ def retries_dag():
     @task
     def failing_task_1():
         """
-        TaskFlow API task that fails and retries according to the DAG-level defaults.
+        TaskFlow API task that fails and retries according to the Dag-level defaults.
         """
         raise ValueError("This task will always fail.")
 
@@ -49,7 +49,7 @@ def retries_dag():
 
     failing_task_2()
 
-    # traditional task that fails and retries according to the DAG-level defaults
+    # traditional task that fails and retries according to the Dag-level defaults
     failing_task_3 = BashOperator(
         task_id="failing_task_3",
         bash_command="exit 1",

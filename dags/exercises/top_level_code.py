@@ -1,15 +1,14 @@
-"""WARNING BAD PRACTICE: DO NOT USE TOP LEVEL CODE IN YOUR DAGS"""
+"""WARNING BAD PRACTICE: DO NOT USE TOP LEVEL CODE IN YOUR DAG FILES"""
 
-from datetime import datetime
+from airflow.sdk import dag, task
+from pendulum import datetime
 
-from airflow.decorators import dag, task
-
-from include.helper_functions import expensive_api_call
+from include.helper_functions import expensive_trajectory_calculation
 
 
 @dag(
     dag_display_name="4. Exercise: top_level_code",
-    start_date=datetime(2023, 1, 1),
+    start_date=datetime(2026, 6, 1),
     max_active_runs=3,
     schedule=None,
     catchup=False,
@@ -18,15 +17,13 @@ from include.helper_functions import expensive_api_call
 def top_level_code():
 
     #### EXERCISE 4 ####
-    the_meaning_of_life_the_universe_and_everything = expensive_api_call()
+    the_optimal_trajectory_correction = expensive_trajectory_calculation()
 
     @task
-    def reveal_the_meaning_of_life_the_universe_and_everything(the_answer):
-        print(f"The meaning of life, the universe, and everything is... {the_answer}.")
+    def reveal_the_trajectory_correction(correction):
+        print(f"The optimal trajectory correction is... {correction} degrees.")
 
-    reveal_the_meaning_of_life_the_universe_and_everything(
-        the_meaning_of_life_the_universe_and_everything
-    )
+    reveal_the_trajectory_correction(the_optimal_trajectory_correction)
 
 
 top_level_code()

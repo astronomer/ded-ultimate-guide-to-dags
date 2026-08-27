@@ -1,8 +1,17 @@
-"""Example DAGs test. This test ensures that all Dags have tags, retries set to two, and no import errors. This is an example pytest and may not be fit the context of your DAGs. Feel free to add and remove tests."""
+"""
+Example Dag validation tests.
 
-import os
+These tests check that every Dag in the project imports cleanly and sets task retries.
+This is an example pytest suite and may not fit the context of your own Dags. Feel free to
+add and remove tests.
+
+Run them with `astro dev pytest` or from the Test tab in the Astro IDE.
+"""
+
 import logging
+import os
 from contextlib import contextmanager
+
 import pytest
 from airflow.models import DagBag
 
@@ -20,7 +29,7 @@ def suppress_logging(namespace):
 
 def get_import_errors():
     """
-    Generate a tuple for import errors in the dag bag
+    Generate a tuple for import errors in the Dag bag.
     """
     with suppress_logging("airflow"):
         dag_bag = DagBag(include_examples=False)
@@ -36,7 +45,7 @@ def get_import_errors():
 
 def get_dags():
     """
-    Generate a tuple of dag_id, <DAG objects> in the DagBag
+    Generate a tuple of dag_id, <DAG objects> in the DagBag.
     """
     with suppress_logging("airflow"):
         dag_bag = DagBag(include_examples=False)
@@ -64,7 +73,7 @@ def test_file_imports(rel_path, rv):
 # )
 # def test_dag_tags(dag_id, dag, fileloc):
 #     """
-#     test if a DAG is tagged and if those TAGs are in the approved list
+#     test if a Dag is tagged and if those tags are in the approved list
 #     """
 #     assert dag.tags, f"{dag_id} in {fileloc} has no tags"
 #     if APPROVED_TAGS:
@@ -76,7 +85,7 @@ def test_file_imports(rel_path, rv):
 # )
 # def test_dag_has_catchup_false(dag_id, dag, fileloc):
 #     """
-#     test if a DAG has catchup set to False
+#     test if a Dag has catchup set to False
 #     """
 #     assert (
 #         dag.catchup == False
@@ -95,7 +104,7 @@ def test_file_imports(rel_path, rv):
 # )
 # def test_dag_uses_allowed_operators_only(dag_id, dag, fileloc):
 #     """
-#     Test if a DAG uses only allowed operators.
+#     Test if a Dag uses only allowed operators.
 #     """
 #     for task in dag.tasks:
 #         assert any(
@@ -108,7 +117,7 @@ def test_file_imports(rel_path, rv):
 )
 def test_dag_retries(dag_id, dag, fileloc):
     """
-    test if a DAG has retries set
+    test if a Dag has retries set
     """
     num_retries = dag.default_args.get("retries", 0)
 

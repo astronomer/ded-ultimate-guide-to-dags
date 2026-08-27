@@ -1,18 +1,16 @@
 """
-### DAG that performs basic math operations
+### Dag that performs basic math operations
 
-This DAG is a simple example of how to use a custom operator to perform basic 
+This Dag is a simple example of how to use a custom operator to perform basic
 math operations.
 Demo: dag.test() and Airflow testing
 """
 
-from airflow.decorators import dag, task
-from airflow.models.baseoperator import chain
-from airflow.models.param import Param
+from airflow.sdk import Param, chain, dag, task
 from pendulum import datetime
 
 from include.custom_operator import MyBasicMathOperator
-from include.helper_functions import get_random_number_from_api
+from include.helper_functions import calculate_launch_offset
 
 
 @dag(
@@ -21,8 +19,8 @@ from include.helper_functions import get_random_number_from_api
     catchup=False,
     doc_md=__doc__,
     params={
-        "upper_limit": Param(100, type="integer"),
-        "lower_limit": Param(1, type="integer"),
+        "base_fare_usd": Param(25000, type="integer"),
+        "base_multiplier": Param(1.2, type="number"),
     },
     default_args={"retries": 3},
     tags=["syntax_example"],
@@ -30,30 +28,24 @@ from include.helper_functions import get_random_number_from_api
 def custom_operator_dag_test():
 
     @task
-    def pick_a_random_number(**context) -> int:
-        "Return a random number within the limits."
-        minimum = context["params"]["lower_limit"]
-        maximum = context["params"]["upper_limit"]
-
-        num = get_random_number_from_api(
-            min=minimum,
-            max=maximum,
-            count=1,
+    def pick_a_launch_offset(**context) -> int:
+        "Return the trajectory offset for the configured route."
+        return calculate_launch_offset(
+            base_fare_usd=context["params"]["base_fare_usd"],
+            multiplier=context["params"]["base_multiplier"],
         )
 
-        return num
-
-    pick_a_random_number_obj = pick_a_random_number()
+    pick_a_launch_offset_obj = pick_a_launch_offset()
 
     operate_with_23 = MyBasicMathOperator(
         task_id="operate_with_23",
-        first_number=pick_a_random_number_obj,
+        first_number=pick_a_launch_offset_obj,
         second_number=23,
         operation="+",
     )
 
     chain(
-        pick_a_random_number_obj,
+        pick_a_launch_offset_obj,
         operate_with_23,
     )
 
@@ -64,12 +56,11 @@ dag_obj = custom_operator_dag_test()
 if __name__ == "__main__":
     # conn_path = "dag_test/connections.yaml"
     # variables_path = "dag_test/variables.yaml"
-    upper_limit = 20
-    lower_limit = 10
 
+    # In Airflow 3, dag.test() takes a logical_date, not an execution_date.
     dag_obj.test(
-        execution_date=datetime(2025, 2, 1),
+        logical_date=datetime(2026, 6, 1),
         # conn_file_path=conn_path,
         # variable_file_path=variables_path,
-        run_conf={"upper_limit": upper_limit, "lower_limit": lower_limit},
+        run_conf={"base_fare_usd": 5000, "base_multiplier": 0.8},
     )

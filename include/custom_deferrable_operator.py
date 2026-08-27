@@ -3,10 +3,8 @@ import asyncio
 import time
 from asgiref.sync import sync_to_async
 from typing import Any, Sequence, AsyncIterator
-from airflow.configuration import conf
-from airflow.models.baseoperator import BaseOperator
+from airflow.sdk import BaseOperator, Context, conf
 from airflow.triggers.base import BaseTrigger, TriggerEvent
-from airflow.utils.context import Context
 
 
 class MyTrigger(BaseTrigger):

@@ -1,12 +1,12 @@
 """
-This DAG shows the TriggerDagRunOperator in deferrable mode.
+This Dag shows the TriggerDagRunOperator in deferrable mode.
 
 Check to see if deferrable mode is available for a specific operator in
 the Astronomer Registry: https://registry.astronomer.io/
 """
 
-from airflow.decorators import dag
-from airflow.operators.trigger_dagrun import TriggerDagRunOperator
+from airflow.sdk import dag
+from airflow.providers.standard.operators.trigger_dagrun import TriggerDagRunOperator
 from include.custom_deferrable_operator import MyDeferrableOperator
 
 

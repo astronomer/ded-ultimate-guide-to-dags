@@ -1,31 +1,30 @@
 """
-This DAG shows examples for different DAG parameters.
+This Dag shows examples for different Dag parameters.
 
 See https://www.astronomer.io/docs/learn/airflow-dag-parameters/ for an extensive list.
 """
 
-from airflow.decorators import dag, task
-from airflow.models.param import Param
+from airflow.sdk import Param, dag, task
 from pendulum import datetime, duration
 
 
 @dag(
-    dag_id="dag_parameters",  # the DAG id is the unique identifier for the DAG, if not set, the name of the decorated function will be used
-    dag_display_name="DAG Parameters 🚀",  # the name displayed in the Airflow UI, can include special characters and emojis
+    dag_id="dag_parameters",  # the Dag id is the unique identifier for the Dag, if not set, the name of the decorated function will be used
+    dag_display_name="Dag Parameters 🚀",  # the name displayed in the Airflow UI, can include special characters and emojis
     start_date=datetime(
-        2024, 11, 1
-    ),  # date after which the DAG can be scheduled, see: https://www.astronomer.io/docs/learn/scheduling-in-airflow/#scheduling-concepts
-    schedule="@daily",  # the DAG's schedule, there are many options, see: https://www.astronomer.io/docs/learn/scheduling-in-airflow for options
-    catchup=False,  # whether or not missed runs should be scheduled upon unpausing of the DAG, see: https://www.astronomer.io/docs/learn/rerunning-dags#catchup
-    max_active_runs=2,  # maximum number of active DAG runs at any point in time
-    max_consecutive_failed_dag_runs=5,  # auto-pauses the DAG after x consecutive failed runs, experimental
-    max_active_tasks=10, # maximum number of active tasks across all runs of this DAG at any point in time
-    dagrun_timeout=duration(hours=2),  # timeout duration for runs of this DAG
-    fail_stop=True,  # fails the whole DAG as soon as any task fails, can only be used with the "all_success" trigger rule
-    description="Show several DAG params",  # description of the DAG next to the name in the UI
-    doc_md=__doc__,  # add DAG Docs in the UI in markdown, see https://www.astronomer.io/docs/learn/custom-airflow-ui-docs-tutorial
+        2026, 6, 1
+    ),  # date after which the Dag can be scheduled, see: https://www.astronomer.io/docs/learn/scheduling-in-airflow/#scheduling-concepts
+    schedule="@daily",  # the Dag's schedule, there are many options, see: https://www.astronomer.io/docs/learn/scheduling-in-airflow for options
+    catchup=False,  # whether or not missed runs should be scheduled upon unpausing of the Dag, see: https://www.astronomer.io/docs/learn/rerunning-dags#catchup
+    max_active_runs=2,  # maximum number of active Dag runs at any point in time
+    max_consecutive_failed_dag_runs=5,  # auto-pauses the Dag after x consecutive failed runs, experimental
+    max_active_tasks=10,  # maximum number of active tasks across all runs of this Dag at any point in time
+    dagrun_timeout=duration(hours=2),  # timeout duration for runs of this Dag
+    fail_fast=True,  # renamed from fail_stop in Airflow 3: fails the whole Dag as soon as any task fails, can only be used with the "all_success" trigger rule
+    description="Show several Dag params",  # description of the Dag next to the name in the UI
+    doc_md=__doc__,  # add Dag Docs in the UI in markdown, see https://www.astronomer.io/docs/learn/custom-airflow-ui-docs-tutorial
     default_args={
-        "owner": "Astro",  # owner of this DAG in the Airflow UI
+        "owner": "Astro",  # owner of this Dag in the Airflow UI
         "retries": 3,  # tasks retry 3 times before they fail
         "retry_delay": duration(seconds=30),  # tasks wait 30s in between retries
         "retry_exponential_backoff": True,  # wait longer between retries with each attempt
@@ -45,12 +44,12 @@ from pendulum import datetime, duration
             maxLength=200,
         ),
         "my_datetime_param": Param(
-            "2016-10-18T14:00:00+00:00",
+            "2026-03-01T00:00:00+00:00",
             type="string",
             format="date-time",
         ),
         "my_enum_param": Param(
-            "Hi :)", type="string", enum=["Hola :)", "Hei :)", "Bonjour :)", "Hi :)"]
+            "Mars", type="string", enum=["Moon", "Mars", "Europa"]
         ),
         "my_bool_param": Param(True, type="boolean"),
     },  # Airflow params can add interactive options on manual runs. See: https://www.astronomer.io/docs/learn/airflow-params

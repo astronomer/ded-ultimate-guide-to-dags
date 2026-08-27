@@ -1,8 +1,8 @@
 """
-This DAG shows how to create several tasks from one definition using .override 
+This Dag shows how to create several tasks from one definition using .override 
 """
 
-from airflow.decorators import dag, task
+from airflow.sdk import dag, task
 
 
 @dag(
