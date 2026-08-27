@@ -150,7 +150,7 @@ Right now `launch_readiness_report` depends on data from `planet_conditions` and
 - 💡 Combining assets with `&` and `|` into a conditional schedule.
 - 💡 Scheduling a Dag on assets **and** a cron expression with `AssetOrTimeSchedule`.
 
-## Your task
+## Your tasks
 
 To make `launch_readiness_report` data-aware, three tasks need to start publishing assets. Modify the following tasks:
 
@@ -221,14 +221,10 @@ With dynamic task mapping you can write Dags that adapt to your data at runtime.
 - 💡 Creating one task instance per list item with `.expand()`.
 - 💡 Passing the mapped output of one task into a downstream task.
 
-## Your task
+## Your tasks
 
-Dynamically map the `get_id_for_one_planet` task over the list of planets returned by `get_planets` in the [`planet_conditions`](dags/exercises/planet_conditions.py) Dag.
-
-You will modify:
-
-1. The `get_planets` task, so it returns all planets in the param instead of only the first one.
-2. The call to `get_id_for_one_planet`, so it is mapped over that list.
+1. Change the `get_planets` task in the [`planet_conditions`](dags/exercises/planet_conditions.py) Dag, so it returns all planets in the param instead of only the first one.
+2. Adjust the call to `get_id_for_one_planet`in the [`planet_conditions`](dags/exercises/planet_conditions.py) Dag, so it is mapped over that list.
 
 See the Dag code comments and the [dynamic task mapping guide](https://www.astronomer.io/docs/learn/dynamic-tasks/) for more hints.
 
@@ -236,43 +232,30 @@ See the Dag code comments and the [dynamic task mapping guide](https://www.astro
 
 1. Sync your changes and trigger `planet_conditions`.
 2. Open the Dag run in the grid view.
-
-Check that:
-
-- [ ] `get_id_for_one_planet` shows **three** mapped task instances instead of one.
-- [ ] The table in the `create_conditions_table` logs now has a column per planet:
-
-    ```text
-    Launch conditions (storm_risk):
-    +----------------+--------+--------+----------+
-    | reading_date   |   Moon |   Mars |   Europa |
-    +================+========+========+==========+
-    | 2026-08-26     |   0.74 |   0.17 |     0.39 |
-    +----------------+--------+--------+----------+
-    ```
+3. Check that the table in the `create_conditions_table` logs now has a column per planet.
 
 > [!TIP]
-> Trigger the Dag with the _Trigger Dag w/ config_ option and add or remove planets in the `my_planets` param. The number of mapped task instances follows your input, without any change to the Dag code.
+> Trigger the Dag with and add or remove planets in the `my_planets` param. The number of mapped task instances follows your input, without any change to the Dag code.
 
 ---
 
 # Exercise 3: Dag parameters
 
-Letting tasks retry by default is one of the cheapest reliability wins in Airflow. It handles transient failures and prevents a long series of failed Dag runs. [Dag parameters](https://www.astronomer.io/docs/learn/airflow-dag-parameters/) are where you set that, along with ownership and failure limits.
+Letting tasks retry by default is one of the easiest reliability wins in Airflow. It handles transient failures and prevents a long series of failed Dag runs.
 
 **What you will learn:**
 
 - 💡 Setting defaults for every task in a Dag with `default_args`.
 - 💡 Auto-pausing a Dag after a number of consecutive failed runs.
 
-## Your task
+## Your tasks
 
 For the [`launch_readiness_report`](dags/exercises/launch_readiness_report.py) Dag:
 
-1. Set all tasks in the Dag to retry 3 times by default and give them a new owner (you).
+1. Set **all tasks** in the Dag to retry 3 times by default (using `default_args`) and give them a new owner (you).
 2. Make sure the Dag never has more than 6 consecutive failed runs.
 
-See the Dag code comments for more hints. For the solution see [`solutions/dags/launch_readiness_report.py`](solutions/dags/launch_readiness_report.py).
+See the Dag code comments for more hints.
 
 > [!TIP]
 > [`dags/code_syntax_examples/dag_parameters.py`](dags/code_syntax_examples/dag_parameters.py) is an annotated tour of the most useful Dag parameters. [`retries_dag.py`](dags/code_syntax_examples/retries_dag.py) in the same folder shows retries at the Dag level, at the task level, and for traditional operators.
@@ -281,11 +264,8 @@ See the Dag code comments for more hints. For the solution see [`solutions/dags/
 
 1. Sync your changes.
 2. Open `launch_readiness_report` in the Airflow UI.
-
-Check that:
-
-- [ ] The owner shown for the Dag is the name you set.
-- [ ] Opening any task and looking at its details shows 3 retries.
+3. Check that the owner shown for the Dag is the name you set.
+4. Open any task and ensure its details shows 3 retries.
 
 ---
 
@@ -298,11 +278,9 @@ Top-level Dag code is an [Airflow anti-pattern](https://www.astronomer.io/docs/l
 - 💡 Recognising top-level code in a Dag file.
 - 💡 Moving expensive work into a task so it runs when the Dag runs.
 
-## Your task
+## Your tasks
 
-Rewrite the [`top_level_code`](dags/exercises/top_level_code.py) Dag so the call to `expensive_trajectory_calculation()` happens inside a task. Then you can proceed to calculate the optimal trajectory correction.
-
-For the solution see [`solutions/dags/top_level_code.py`](solutions/dags/top_level_code.py).
+1. Rewrite the [`top_level_code`](dags/exercises/top_level_code.py) Dag so the call to `expensive_trajectory_calculation()` happens inside a task. Then you can proceed to calculate the optimal trajectory correction.
 
 > [!TIP]
 > Want to see the problem for yourself? Increase the `sleep()` in `expensive_trajectory_calculation` in [`include/helper_functions.py`](include/helper_functions.py) before you fix the Dag, and watch how long the Dag takes to show up after a sync. Set it back afterwards.
@@ -313,11 +291,6 @@ For the solution see [`solutions/dags/top_level_code.py`](solutions/dags/top_lev
 ## Test your changes
 
 1. Sync your changes and trigger `top_level_code`.
-
-Check that:
-
-- [ ] The task logs print the trajectory correction.
-- [ ] No call to `expensive_trajectory_calculation()` remains outside a task.
 
 ---
 
