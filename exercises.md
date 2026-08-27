@@ -152,32 +152,58 @@ Right now `launch_readiness_report` depends on data from `planet_conditions` and
 
 ## Your task
 
-Give `launch_readiness_report` a schedule that runs the Dag:
-
-- every day at midnight UTC **AND**
-- whenever both the `planet-conditions` and `launch-temperature` assets are updated **AND** ONE OF the assets `launch-storm-risk` **OR** `launch-visibility` is updated.
-
-To make that possible, three tasks need to start publishing assets. You will modify:
+To make `launch_readiness_report` data-aware, three tasks need to start publishing assets. Modify the following tasks:
 
 1. The `create_conditions_table` task in [`planet_conditions`](dags/exercises/planet_conditions.py) to produce an update to `Asset("planet-conditions")`.
 2. The `get_storm_risk` task in [`launch_window_history`](dags/exercises/launch_window_history.py) to produce an update to `Asset("launch-storm-risk")`.
 3. The `get_visibility` task in [`launch_window_history`](dags/exercises/launch_window_history.py) to produce an update to `Asset("launch-visibility")`.
-4. The schedule of [`launch_readiness_report`](dags/exercises/launch_readiness_report.py), using an [`AssetOrTimeSchedule`](https://www.astronomer.io/docs/learn/airflow-datasets).
 
 > [!TIP]
-> The `get_temperature` task in `launch_window_history` already publishes an asset. Use it as your template for tasks 2 and 3.
->
-> For task 4, `AssetOrTimeSchedule` and `CronTriggerTimetable` are already imported at the top of the file, and the assets are already defined as constants. Use parentheses `()` rather than brackets `[]` around the asset expression, otherwise you cannot use the conditional operators.
+> The `get_temperature` task in `launch_window_history` already publishes an asset. Use it as your template.
 
-See the Dag code comments for more hints.
+Now that the required assets are published, the schedule of `launch_readiness_report` must be changed.
+
+4. Change the schedule of [`launch_readiness_report`](dags/exercises/launch_readiness_report.py), using an [`AssetOrTimeSchedule`](https://www.astronomer.io/docs/learn/airflow-datasets) with the following conditions:
+    - run every day at midnight UTC **AND**
+    - whenever both the `planet-conditions` and `launch-temperature` assets are updated **AND** ONE OF the assets `launch-storm-risk` **OR** `launch-visibility` is updated.
+
+`AssetOrTimeSchedule` takes exactly two arguments, and the Dag runs when **either** of them fires. That is where the "Or" in the name comes from:
+
+```python
+schedule=AssetOrTimeSchedule(
+    timetable=CronTriggerTimetable("<cron expression>", timezone="UTC"),  # the time half
+    assets=(<asset expression>),                                          # the data half
+),
+```
+
+For the data half you combine assets with two operators:
+
+| Operator | Means | Reads as |
+|---|---|---|
+| `&` | both assets must have been updated | AND |
+| `\|` | either asset is enough | OR |
+
+They nest with parentheses, exactly like arithmetic. Here is a complete worked example, taken from [`conditional_asset_schedule.py`](dags/code_syntax_examples/conditional_asset_schedule.py). It fires when one asset from **each** group is updated:
+
+```python
+schedule=(
+    (Asset("launch-temperature") | Asset("launch-storm-risk"))
+    & (Asset("launch-visibility") | Asset("solar-activity"))
+),
+```
+
+Your expression is a different shape from that one, so read the requirement above again and build it clause by clause. In `launch_readiness_report` the five assets are already defined as constants near the top of the file, so you write `_PLANET_CONDITIONS` rather than `Asset("planet-conditions")`.
+
+`AssetOrTimeSchedule` and `CronTriggerTimetable` are already imported at the top of the file, and the Dag code comments carry the same hints.
 
 ## Test your changes
 
 1. Sync your changes to the test deployment by clicking _Sync to Test_ within the Astro IDE.
-2. Open Airflow and make sure all four Dags are unpaused.
-3. Trigger `planet_conditions` and wait for it to finish.
-4. Trigger `launch_window_history` and wait for it to finish.
-5. `launch_readiness_report` should now start **on its own**.
+2. Open Airflow and check that `launch_readiness_report` still appears in the Dags list. If it vanished or shows an import error, your schedule expression has a syntax problem. Read the error, fix it, sync again.
+3. Make sure all four Dags are unpaused.
+4. Trigger `planet_conditions` and wait for it to finish.
+5. Trigger `launch_window_history` and wait for it to finish.
+6. `launch_readiness_report` should now start **on its own**.
 
 > [!TIP]
 > Open the _Assets_ page in the Airflow UI. It shows every asset in your environment, which task produced the last update, and which Dags are waiting on it. This is the fastest way to see why a Dag did or did not trigger.
@@ -204,7 +230,7 @@ You will modify:
 1. The `get_planets` task, so it returns all planets in the param instead of only the first one.
 2. The call to `get_id_for_one_planet`, so it is mapped over that list.
 
-See the Dag code comments and the [dynamic task mapping guide](https://www.astronomer.io/docs/learn/dynamic-tasks/) for more hints. For the solution see [`solutions/dags/planet_conditions.py`](solutions/dags/planet_conditions.py).
+See the Dag code comments and the [dynamic task mapping guide](https://www.astronomer.io/docs/learn/dynamic-tasks/) for more hints.
 
 ## Test your changes
 

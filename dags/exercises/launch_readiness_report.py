@@ -41,8 +41,22 @@ _SOLAR_ACTIVITY = Asset("solar-activity")
     # Schedule the Dag to run every day at midnight UTC
     # AND whenever both "planet-conditions" and "launch-temperature" are updated
     # AS WELL AS ONE OF the assets "launch-storm-risk" OR "launch-visibility".
-    # Tip: the constants below are already defined for you, and the imports you need
-    # are already at the top of this file.
+    #
+    # Replace `schedule=None` with an AssetOrTimeSchedule. It takes two arguments, and the
+    # Dag runs when EITHER of them fires:
+    #
+    #     timetable=CronTriggerTimetable("<cron>", timezone="UTC")   <- the time half
+    #     assets=(<asset expression>)                                <- the data half
+    #
+    # Build the asset expression from the _PLANET_CONDITIONS style constants defined ABOVE
+    # this decorator, combined with & (both) and | (either one).
+    #
+    # Watch the precedence: & binds tighter than |, so "a & b & c | d" is read as
+    # "(a & b & c) | d". Put the OR group in its own parentheses.
+    #
+    # AssetOrTimeSchedule and CronTriggerTimetable are already imported at the top of this
+    # file. For worked examples see dags/code_syntax_examples/asset_or_time_schedule.py
+    # (the outer structure) and conditional_asset_schedule.py (the & and | operators).
 
     ### START CODE HERE ###
     schedule=None,
