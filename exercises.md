@@ -127,7 +127,11 @@ There is also [`top_level_code`](dags/exercises/top_level_code.py), shown as _4.
 
 Unpause all four Dags in the Airflow UI, then trigger `planet_conditions` with default parameters. Open the Dag Run view of the run you just triggered, and open the logs of the `create_conditions_table` task.
 
+![Trigger Dag from the Dags view](doc/screenshot-dags-view.png)
+
 The conditions table only has one column, even though you requested three planets with the default Dag parameters.
+
+![Task logs showing only one planet](doc/screenshot-logs.png)
 
 Now trigger `launch_window_history`, again with default parameters. Notice how the `launch_readiness_report` never runs on its own, because nothing connects it to the two Dags above.
 
@@ -233,6 +237,8 @@ See the Dag code comments and the [dynamic task mapping guide](https://www.astro
 1. Sync your changes and trigger `planet_conditions`.
 2. Open the Dag run in the grid view.
 3. Check that the table in the `create_conditions_table` logs now has a column per planet.
+
+![Task logs showing expected planets after adding dynamic task mapping](doc/screenshot-dtm-logs.png)
 
 > [!TIP]
 > Trigger the Dag and add or remove planets in the `my_planets` param. The number of mapped task instances follows your input, without any change to the Dag code.
