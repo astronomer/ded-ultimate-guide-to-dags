@@ -3,15 +3,14 @@
 
 """
 
-from airflow.decorators import dag
-from airflow.operators.python import PythonOperator
+from airflow.sdk import dag
+from airflow.providers.standard.operators.python import PythonOperator
 import time
 
 
 @dag(
     start_date=None,
     schedule=None,
-    catchup=False,
     tags=["syntax_example"],
     default_args={"retries": 3},
 )

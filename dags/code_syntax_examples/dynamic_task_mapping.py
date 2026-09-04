@@ -1,5 +1,5 @@
 """
-This DAG shows dynamic task mapping syntax for:
+This Dag shows dynamic task mapping syntax for:
 
 - .expand
 - .expand_kwargs
@@ -10,14 +10,13 @@ as well as custom map indexing with map_index_template.
 See also: https://www.astronomer.io/docs/learn/dynamic-tasks/
 """
 
-from airflow.decorators import dag, task
-from airflow.operators.bash import BashOperator
+from airflow.sdk import dag, task
+from airflow.providers.standard.operators.bash import BashOperator
 
 
 @dag(
     start_date=None,
     schedule=None,
-    catchup=False,
     tags=["syntax_example"],
     default_args={"retries": 3},
 )
@@ -34,7 +33,7 @@ def dynamic_task_mapping():
         print(num)
         print(letter)
 
-        from airflow.operators.python import get_current_context
+        from airflow.sdk import get_current_context
 
         context = get_current_context()
         context["my_custom_map_index"] = "Number: " + str(num) + " Letter: " + letter
@@ -67,7 +66,7 @@ def dynamic_task_mapping():
         print(num)
         print(letter)
 
-        from airflow.operators.python import get_current_context
+        from airflow.sdk import get_current_context
 
         context = get_current_context()
         context["my_custom_map_index"] = "Number: " + str(num) + " Letter: " + letter
@@ -99,7 +98,7 @@ def dynamic_task_mapping():
     def mapped_task_5(num):
         print(num)
 
-        from airflow.operators.python import get_current_context
+        from airflow.sdk import get_current_context
 
         context = get_current_context()
         context["my_custom_map_index"] = "Number: " + str(num)

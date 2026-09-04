@@ -1,9 +1,8 @@
 """
-This DAG shows how to use execution_timeouts
+This Dag shows how to use execution_timeouts
 """
 
-from airflow.decorators import dag, task
-from airflow.models.baseoperator import chain
+from airflow.sdk import chain, dag, task
 from datetime import timedelta
 import time
 
@@ -11,9 +10,8 @@ import time
 @dag(
     start_date=None,
     schedule=None,
-    catchup=False,
     tags=["syntax_example"],
-    default_args={"execution_timeout": timedelta(seconds=10)},
+    default_args={"execution_timeout": timedelta(seconds=10), "retries": 3},
 )
 def execution_timeout():
 
@@ -27,7 +25,7 @@ def execution_timeout():
         time.sleep(15)
         return "slow"
 
-    @task(execution_timeout=timedelta(seconds=20))  # overriding the DAG-level timeout
+    @task(execution_timeout=timedelta(seconds=20))  # overriding the Dag-level timeout
     def slow_task_that_got_an_extension():
         time.sleep(15)
         return "slow"

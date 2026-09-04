@@ -1,15 +1,14 @@
 """
-This DAG shows how to use the run_if and skip_if decorators.
+This Dag shows how to use the run_if and skip_if decorators.
 """
 
-from airflow.decorators import dag, task
+from airflow.sdk import dag, task
 from pendulum import datetime
 
 
 @dag(
     start_date=datetime(2024, 8, 1),
     schedule=None,
-    catchup=False,
     tags=["syntax_example"],
     default_args={"retries": 3},
 )

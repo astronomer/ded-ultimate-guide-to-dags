@@ -3,14 +3,13 @@
 
 """
 
-from airflow.decorators import dag, task
+from airflow.sdk import dag, task
 import time
 
 
 @dag(
     start_date=None,
     schedule=None,
-    catchup=False,
     tags=["syntax_example"],
     default_args={"retries": 3},
 )

@@ -1,5 +1,5 @@
 """
-This DAG shows how to use common Airflow decorators.
+This Dag shows how to use common Airflow decorators.
 
 - PythonOperator -> @task
 - BashOperator -> @task.bash 
@@ -10,18 +10,16 @@ See also:
 - Learn guide: https://www.astronomer.io/docs/learn/airflow-decorators
 """
 
-from airflow.decorators import dag, task
-from airflow.operators.bash import BashOperator
-from airflow.operators.python import BranchPythonOperator, PythonOperator
-from airflow.sensors.python import PythonSensor
-from airflow.operators.empty import EmptyOperator
-from airflow.models.baseoperator import chain
+from airflow.sdk import chain, dag, task
+from airflow.providers.standard.operators.bash import BashOperator
+from airflow.providers.standard.operators.python import BranchPythonOperator, PythonOperator
+from airflow.providers.standard.sensors.python import PythonSensor
+from airflow.providers.standard.operators.empty import EmptyOperator
 
 
 @dag(
     start_date=None,
     schedule=None,
-    catchup=False,
     tags=["syntax_example"],
     default_args={"retries": 3},
 )
